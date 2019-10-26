@@ -1,11 +1,10 @@
 use std::str::FromStr;
-use std::fmt::Debug;
 
 fn main() {
     println!("Hello, world!");
 }
 
-struct Sp<A, B>(A, B);
+pub struct Sp<A, B>(A, B);
 
 impl<A, B> FromStr for Sp<A, B>
     where
@@ -16,15 +15,13 @@ impl<A, B> FromStr for Sp<A, B>
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut components = s.splitn(2, ' ');
-        let a = components.next()
-            .ok_or("errore")
-            .and_then(|c| c.parse().map_err(|_| "errore"))?;
-        let b = components.next()
-            .ok_or("errore")
-            .and_then(|c| c.parse().map_err(|_| "errore"))?;
         Ok(Self(
-            a,
-            b
+            components.next()
+                .ok_or("errore")
+                .and_then(|c| c.parse().map_err(|_| "errore"))?,
+            components.next()
+                .ok_or("errore")
+                .and_then(|c| c.parse().map_err(|_| "errore"))?
         ))
     }
 }
